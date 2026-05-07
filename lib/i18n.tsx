@@ -1,0 +1,446 @@
+"use client";
+import { createContext, useContext, useState, type ReactNode } from "react";
+
+export type Lang = "fr" | "en";
+
+export const translations = {
+  fr: {
+    nav: { product: "Produit", solutions: "Solutions", about: "À propos", demo: "Demander une démo", login: "Connexion" },
+    hero: {
+      eyebrow: "Vision par ordinateur · Basketball africain",
+      headline: "L'intelligence visuelle\nau service du jeu.",
+      sub: "Songa analyse vos matchs en temps réel — trajectoires, tirs, mouvements — pour donner à vos entraîneurs un avantage compétitif réel.",
+      cta_primary: "Demander une démo",
+      cta_secondary: "Voir le produit",
+      origin: "Conçu en Côte d'Ivoire · Pour l'Afrique",
+    },
+    stats: [
+      { value: "94%", label: "Précision de détection" },
+      { value: "<2min", label: "Analyse par match" },
+      { value: "12", label: "Métriques en temps réel" },
+      { value: "0", label: "Infrastructure requise" },
+    ],
+    features: {
+      label: "Fonctionnalités",
+      headline: "Ce que Songa voit,\nque vous ne voyez pas.",
+      items: [
+        { title: "Suivi de trajectoire", desc: "Chaque joueur tracé image par image. Visualisez les mouvements, les zones de pression et les patterns défensifs." },
+        { title: "Analyse des tirs", desc: "Heatmap des zones de tir, efficacité par zone, tendances sur la saison. Décisions fondées sur les données." },
+        { title: "Métriques d'équipe", desc: "Possession, spacing, transition offense/défense — tout ce qui ne figure pas dans la box score." },
+        { title: "Rapport instantané", desc: "Rapport PDF généré en moins de 2 minutes après le coup de sifflet final. Prêt pour le debriefing." },
+      ],
+    },
+    how: {
+      label: "Comment ça marche",
+      headline: "Trois étapes. Zéro friction.",
+      steps: [
+        { num: "01", title: "Envoyez la vidéo", desc: "Upload du fichier match ou connexion à votre flux live. Formats MP4, MKV, RTSP." },
+        { num: "02", title: "Songa analyse", desc: "Notre pipeline CV détecte joueurs et ballon, reconstruit les trajectoires, classe les actions." },
+        { num: "03", title: "Exploitez les insights", desc: "Dashboard interactif, exports PDF/CSV, partage avec votre staff en un clic." },
+      ],
+    },
+    audience: {
+      label: "Solutions",
+      headline: "Pour chaque niveau du jeu.",
+      coach: { title: "Entraîneurs", desc: "Préparez vos matchs avec des données précises. Identifiez les tendances adverses, optimisez votre attaque.", cta: "Voir le dashboard coach" },
+      academy: { title: "Académies & Clubs", desc: "Suivez la progression de chaque joueur sur la saison. Identifiez les talents émergents avec objectivité.", cta: "Voir le dashboard académie" },
+    },
+    pricing: {
+      label: "Tarifs",
+      headline: "Investissez dans la data. Gagnez des matchs.",
+      sub: "Conçu pour les clubs africains de toute taille.",
+      monthly: "Mensuel",
+      yearly: "Annuel",
+      save: "−20%",
+      mo: "/mois",
+      yr: "/an",
+      cta: "Démarrer",
+      cta_demo: "Demander une démo",
+      popular: "Le plus populaire",
+      plans: [
+        {
+          name: "Club",
+          price_mo: 99,
+          price_yr: 79,
+          desc: "L'essentiel pour démarrer avec la data basketball.",
+          features: [
+            "Jusqu'à 5 matchs / mois",
+            "2 utilisateurs inclus",
+            "Rapport PDF automatique",
+            "Shot chart & heatmap",
+            "Statistiques de base",
+            "Support email",
+          ],
+          popular: false,
+        },
+        {
+          name: "Pro",
+          price_mo: 249,
+          price_yr: 199,
+          desc: "Pour les clubs sérieux qui veulent un avantage compétitif réel.",
+          features: [
+            "Matchs illimités",
+            "10 utilisateurs inclus",
+            "Toutes les métriques avancées",
+            "Tracking en temps réel",
+            "Export API & CSV",
+            "Tableau de bord collaboratif",
+            "Support prioritaire",
+            "Historique illimité",
+          ],
+          popular: true,
+        },
+        {
+          name: "Fédération",
+          price_mo: 699,
+          price_yr: 559,
+          desc: "L'infrastructure data pour gérer une ligue ou une fédération nationale.",
+          features: [
+            "Tout le plan Pro",
+            "Multi-clubs & multi-ligues",
+            "White-label (votre marque)",
+            "Intégration broadcast & diffusion",
+            "SLA garanti à 99,9%",
+            "Account manager dédié",
+            "Formation de l'équipe technique",
+            "API avancée & webhooks",
+            "Rapports agrégés ligue",
+            "Accès prioritaire aux nouvelles fonctionnalités",
+          ],
+          popular: false,
+        },
+      ],
+    },
+    demo: {
+      title: "Demander une démo",
+      subtitle: "Voyez Songa en action sur vos propres matchs. Un expert vous contacte sous 24h.",
+      name: "Nom complet",
+      email: "Email professionnel",
+      club: "Club ou organisation",
+      role: "Votre rôle",
+      roles: ["Entraîneur", "Directeur sportif", "Dirigeant de club", "Fédération", "Autre"],
+      message: "Message (optionnel)",
+      submit: "Envoyer la demande",
+      success: "Demande envoyée ! Nous vous contacterons sous 24h.",
+    },
+    social_proof: {
+      label: "Ils nous font confiance",
+      headline: "Conçu pour l'écosystème du basketball africain.",
+      quotes: [
+        {
+          text: "Songa nous a permis de préparer nos matchs différemment. Les données sur les zones de tir adverses ont changé notre approche défensive en seulement deux semaines.",
+          author: "Kouadio Jean-Marie",
+          role: "Entraîneur principal",
+          club: "ABC Fighters, Abidjan",
+        },
+        {
+          text: "En tant que directeur sportif, j'avais besoin d'objectiver les décisions de recrutement. Avec Songa, chaque évaluation de joueur est appuyée par des chiffres concrets.",
+          author: "Mamadou Diallo",
+          role: "Directeur sportif",
+          club: "Dakar Basketball Academy",
+        },
+        {
+          text: "Notre fédération suit maintenant 12 clubs simultanément. La vue multi-club de Songa est exactement ce dont nous avions besoin pour normaliser l'analyse à l'échelle nationale.",
+          author: "Aminata Koné",
+          role: "Responsable technique",
+          club: "Fédération de Basketball de Côte d'Ivoire",
+        },
+      ],
+      orgs: ["FIBA Africa", "BAL", "FIBA", "Ligue de Basket CIV", "Basketball Africa"],
+    },
+    footer: {
+      tagline: "L'intelligence visuelle au service du jeu.",
+      origin: "Conçu à Abidjan · © 2026 Songa",
+      product: "Produit", company: "Entreprise", legal: "Légal",
+      links_product: ["Fonctionnalités", "Tarifs", "Démo", "API"],
+      links_company: ["À propos", "Contact", "Blog"],
+      links_legal: ["Confidentialité", "CGU"],
+    },
+    showcase: {
+      label: "Le produit",
+      headline: "Voyez Songa en action.",
+      blocks: [
+        {
+          eyebrow: "Analyse de match",
+          title: "Chaque tir.\nChaque zone.\nChaque décision.",
+          body: "Songa cartographie automatiquement tous les tirs en zones NBA. Efficacité par zone, tendances sur la saison, comparaison adversaire — en temps réel.",
+          bullets: [
+            "Heatmap interactive par quart-temps",
+            "Comparaison domicile / extérieur",
+            "Export PDF en 1 clic",
+          ],
+          cta: "Voir le dashboard →",
+        },
+        {
+          eyebrow: "Tracking en temps réel",
+          title: "Chaque joueur.\nChaque mouvement.\nChaque pattern.",
+          body: "Notre pipeline CV détecte et suit jusqu'à 12 joueurs simultanément. Distances parcourues, vitesses, zones de pression défensive.",
+          bullets: [
+            "Tracking 30fps, latence < 200ms",
+            "Identification automatique home/away",
+            "Heatmap de présence par joueur",
+          ],
+          cta: "",
+        },
+        {
+          eyebrow: "Gestion d'académie",
+          title: "Développez\nles talents\nde demain.",
+          body: "Songa analyse la progression de chaque joueur sur la saison. Identifiez les talents émergents automatiquement, objectivement.",
+          bullets: [
+            "Suivi individuel sur toute la saison",
+            "Détection IA des progressions > 10%",
+            "Rapports de progression mensuels",
+          ],
+          cta: "",
+        },
+      ],
+    },
+    coach: {
+      back: "← Retour",
+      title: "Tableau de bord — Match",
+      subtitle: "ABC Fighters vs Étoile Filante du Sahel · 14 nov. 2026",
+      export: "Exporter PDF",
+      stats: [
+        { label: "Score", value: "78–72" },
+        { label: "Possessions", value: "94" },
+        { label: "Efficacité off.", value: "108.4" },
+        { label: "Rebonds", value: "42" },
+      ],
+    },
+    academy: {
+      title: "Tableau de bord — Académie",
+      subtitle: "Centre de Formation Songa · Saison 2025–26",
+      stats: [
+        { label: "Joueurs suivis", value: "47" },
+        { label: "Matchs analysés", value: "128" },
+        { label: "Heures capturées", value: "1 240h" },
+        { label: "Talents émergents", value: "6" },
+      ],
+    },
+  },
+  en: {
+    nav: { product: "Product", solutions: "Solutions", about: "About", demo: "Book a Demo", login: "Sign in" },
+    hero: {
+      eyebrow: "Computer Vision · African Basketball",
+      headline: "Visual intelligence\nfor the game.",
+      sub: "Songa analyzes your games in real time — trajectories, shots, movement — giving your coaches a real competitive edge.",
+      cta_primary: "Book a Demo",
+      cta_secondary: "See the product",
+      origin: "Built in Côte d'Ivoire · For Africa",
+    },
+    stats: [
+      { value: "94%", label: "Detection accuracy" },
+      { value: "<2min", label: "Analysis per game" },
+      { value: "12", label: "Real-time metrics" },
+      { value: "0", label: "Infrastructure needed" },
+    ],
+    features: {
+      label: "Features",
+      headline: "What Songa sees\nthat you don't.",
+      items: [
+        { title: "Trajectory tracking", desc: "Every player traced frame by frame. Visualize movement, pressure zones and defensive patterns." },
+        { title: "Shot analysis", desc: "Shot zone heatmap, zone efficiency, season trends. Decisions backed by data." },
+        { title: "Team metrics", desc: "Possession, spacing, offense/defense transition — everything that's not in the box score." },
+        { title: "Instant report", desc: "PDF report generated in under 2 minutes after the final buzzer. Ready for debriefing." },
+      ],
+    },
+    how: {
+      label: "How it works",
+      headline: "Three steps. Zero friction.",
+      steps: [
+        { num: "01", title: "Send the video", desc: "Upload match file or connect your live stream. MP4, MKV, RTSP formats." },
+        { num: "02", title: "Songa analyzes", desc: "Our CV pipeline detects players and ball, reconstructs trajectories, classifies actions." },
+        { num: "03", title: "Use the insights", desc: "Interactive dashboard, PDF/CSV exports, share with your staff in one click." },
+      ],
+    },
+    audience: {
+      label: "Solutions",
+      headline: "For every level of the game.",
+      coach: { title: "Coaches", desc: "Prepare your games with precise data. Identify opponent tendencies, optimize your offense.", cta: "See coach dashboard" },
+      academy: { title: "Academies & Clubs", desc: "Track each player's progression over the season. Identify emerging talent objectively.", cta: "See academy dashboard" },
+    },
+    pricing: {
+      label: "Pricing",
+      headline: "Invest in data. Win games.",
+      sub: "Built for African clubs of every size.",
+      monthly: "Monthly",
+      yearly: "Yearly",
+      save: "−20%",
+      mo: "/mo",
+      yr: "/yr",
+      cta: "Get started",
+      cta_demo: "Book a demo",
+      popular: "Most popular",
+      plans: [
+        {
+          name: "Club",
+          price_mo: 99,
+          price_yr: 79,
+          desc: "The essentials to get started with basketball data.",
+          features: [
+            "Up to 5 games / month",
+            "2 included users",
+            "Automatic PDF report",
+            "Shot chart & heatmap",
+            "Core statistics",
+            "Email support",
+          ],
+          popular: false,
+        },
+        {
+          name: "Pro",
+          price_mo: 249,
+          price_yr: 199,
+          desc: "For serious clubs that want a real competitive edge.",
+          features: [
+            "Unlimited games",
+            "10 included users",
+            "All advanced metrics",
+            "Real-time tracking",
+            "API & CSV export",
+            "Collaborative dashboard",
+            "Priority support",
+            "Unlimited history",
+          ],
+          popular: true,
+        },
+        {
+          name: "Federation",
+          price_mo: 699,
+          price_yr: 559,
+          desc: "The data infrastructure to manage a league or national federation.",
+          features: [
+            "Everything in Pro",
+            "Multi-club & multi-league",
+            "White-label (your brand)",
+            "Broadcast & streaming integration",
+            "99.9% guaranteed SLA",
+            "Dedicated account manager",
+            "Technical team onboarding",
+            "Advanced API & webhooks",
+            "League aggregate reports",
+            "Early access to new features",
+          ],
+          popular: false,
+        },
+      ],
+    },
+    demo: {
+      title: "Request a demo",
+      subtitle: "See Songa in action on your own games. An expert will reach out within 24h.",
+      name: "Full name",
+      email: "Professional email",
+      club: "Club or organization",
+      role: "Your role",
+      roles: ["Coach", "Sporting Director", "Club Executive", "Federation", "Other"],
+      message: "Message (optional)",
+      submit: "Send request",
+      success: "Request sent! We'll reach out within 24h.",
+    },
+    social_proof: {
+      label: "Trusted by",
+      headline: "Built for the African basketball ecosystem.",
+      quotes: [
+        {
+          text: "Songa changed how we prepare for games. The opponent shot zone data transformed our defensive approach in just two weeks.",
+          author: "Kouadio Jean-Marie",
+          role: "Head Coach",
+          club: "ABC Fighters, Abidjan",
+        },
+        {
+          text: "As a sporting director, I needed to bring objectivity to recruitment decisions. With Songa, every player evaluation is backed by concrete numbers.",
+          author: "Mamadou Diallo",
+          role: "Sporting Director",
+          club: "Dakar Basketball Academy",
+        },
+        {
+          text: "Our federation now tracks 12 clubs simultaneously. Songa's multi-club view is exactly what we needed to standardize analysis at national scale.",
+          author: "Aminata Koné",
+          role: "Technical Director",
+          club: "Basketball Federation of Côte d'Ivoire",
+        },
+      ],
+      orgs: ["FIBA Africa", "BAL", "FIBA", "Ligue de Basket CIV", "Basketball Africa"],
+    },
+    footer: {
+      tagline: "Visual intelligence for the game.",
+      origin: "Built in Abidjan · © 2026 Songa",
+      product: "Product", company: "Company", legal: "Legal",
+      links_product: ["Features", "Pricing", "Demo", "API"],
+      links_company: ["About", "Contact", "Blog"],
+      links_legal: ["Privacy", "Terms"],
+    },
+    showcase: {
+      label: "The product",
+      headline: "See Songa in action.",
+      blocks: [
+        {
+          eyebrow: "Match analysis",
+          title: "Every shot.\nEvery zone.\nEvery decision.",
+          body: "Songa automatically maps every shot across NBA zones. Zone efficiency, season trends, opponent comparison — in real time.",
+          bullets: [
+            "Interactive heatmap by quarter",
+            "Home / away comparison",
+            "1-click PDF export",
+          ],
+          cta: "See the dashboard →",
+        },
+        {
+          eyebrow: "Real-time tracking",
+          title: "Every player.\nEvery movement.\nEvery pattern.",
+          body: "Our CV pipeline detects and tracks up to 12 players simultaneously. Distance covered, speeds, defensive pressure zones.",
+          bullets: [
+            "30fps tracking, latency < 200ms",
+            "Automatic home/away identification",
+            "Per-player presence heatmap",
+          ],
+          cta: "",
+        },
+        {
+          eyebrow: "Academy management",
+          title: "Develop\nthe talents\nof tomorrow.",
+          body: "Songa analyzes each player's progression over the season. Identify emerging talent automatically and objectively.",
+          bullets: [
+            "Individual tracking across the full season",
+            "AI detection of progressions > 10%",
+            "Monthly progression reports",
+          ],
+          cta: "",
+        },
+      ],
+    },
+    coach: {
+      back: "← Back",
+      title: "Dashboard — Match",
+      subtitle: "ABC Fighters vs Étoile Filante du Sahel · Nov 14, 2026",
+      export: "Export PDF",
+      stats: [
+        { label: "Score", value: "78–72" },
+        { label: "Possessions", value: "94" },
+        { label: "Off. Efficiency", value: "108.4" },
+        { label: "Rebounds", value: "42" },
+      ],
+    },
+    academy: {
+      title: "Dashboard — Academy",
+      subtitle: "Songa Training Center · 2025–26 Season",
+      stats: [
+        { label: "Players tracked", value: "47" },
+        { label: "Games analyzed", value: "128" },
+        { label: "Hours captured", value: "1,240h" },
+        { label: "Emerging talents", value: "6" },
+      ],
+    },
+  },
+} as const;
+
+export type T = typeof translations.fr;
+interface Ctx { lang: Lang; setLang: (l: Lang) => void; t: T }
+export const LangContext = createContext<Ctx>({ lang: "fr", setLang: () => {}, t: translations.fr });
+
+export function LangProvider({ children }: { children: ReactNode }) {
+  const [lang, setLang] = useState<Lang>("fr");
+  const t = translations[lang] as T;
+  return <LangContext.Provider value={{ lang, setLang, t }}>{children}</LangContext.Provider>;
+}
+export function useLang() { return useContext(LangContext); }

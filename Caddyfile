@@ -1,0 +1,26 @@
+songa.ai {
+    reverse_proxy songa-web:3000
+
+    encode gzip zstd
+
+    header {
+        Strict-Transport-Security "max-age=31536000; includeSubDomains; preload"
+        X-Content-Type-Options nosniff
+        X-Frame-Options DENY
+        Referrer-Policy strict-origin-when-cross-origin
+        -Server
+    }
+}
+
+api.songa.ai {
+    reverse_proxy songa-cv-api:8000
+
+    # CORS headers pour le frontend
+    header {
+        Access-Control-Allow-Origin "https://songa.ai"
+        Access-Control-Allow-Methods "GET, POST, OPTIONS"
+        Access-Control-Allow-Headers "Content-Type, Authorization"
+    }
+
+    encode gzip
+}

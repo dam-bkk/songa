@@ -1,0 +1,11 @@
+.venv
+uploads/
+output/
+models/*.pt
+__pycache__
+*.pyc
+.git
+.DS_Store
+*.mp4
+*.mkv
+*.avi

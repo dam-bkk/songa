@@ -1,0 +1,11 @@
+.venv/
+__pycache__/
+*.pyc
+*.pyo
+models/*.pt
+uploads/
+output/
+*.mp4
+*.mkv
+*.avi
+sample_output/*.mp4

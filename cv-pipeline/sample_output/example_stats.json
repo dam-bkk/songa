@@ -1,0 +1,118 @@
+{
+  "meta": {
+    "game": "ABC Fighters vs Etoile Filante du Sahel",
+    "date": "2026-11-14",
+    "duration_s": 2400,
+    "fps": 30,
+    "frames_analyzed": 72000
+  },
+  "team_stats": {
+    "possession_pct": 52.4,
+    "avg_spacing_m": 4.8,
+    "paint_touches": 38,
+    "transition_speed_ms": 3.2
+  },
+  "player_stats": {
+    "1": {
+      "player_id": 1,
+      "name": "Yao Konate",
+      "pos": "PG",
+      "total_distance_m": 4820,
+      "avg_speed_ms": 2.01,
+      "max_speed_ms": 7.4,
+      "time_in_paint_s": 142,
+      "shots_attempted": 14,
+      "shots_made": 8,
+      "shot_pct": 0.571,
+      "shot_zones": {
+        "paint_left": {"made": 4, "attempted": 5, "pct": 0.8},
+        "top_key_3": {"made": 3, "attempted": 6, "pct": 0.5},
+        "mid_range_left": {"made": 1, "attempted": 3, "pct": 0.333}
+      }
+    },
+    "2": {
+      "player_id": 2,
+      "name": "Aboubacar Diabate",
+      "pos": "C",
+      "total_distance_m": 3210,
+      "avg_speed_ms": 1.34,
+      "max_speed_ms": 5.8,
+      "time_in_paint_s": 680,
+      "shots_attempted": 10,
+      "shots_made": 6,
+      "shot_pct": 0.6,
+      "shot_zones": {
+        "paint_left": {"made": 5, "attempted": 8, "pct": 0.625},
+        "mid_range_left": {"made": 1, "attempted": 2, "pct": 0.5}
+      }
+    },
+    "3": {
+      "player_id": 3,
+      "name": "Mamadou Traore",
+      "pos": "SF",
+      "total_distance_m": 4105,
+      "avg_speed_ms": 1.71,
+      "max_speed_ms": 6.9,
+      "time_in_paint_s": 210,
+      "shots_attempted": 11,
+      "shots_made": 5,
+      "shot_pct": 0.455,
+      "shot_zones": {
+        "corner_3_left_bot": {"made": 2, "attempted": 4, "pct": 0.5},
+        "arc_3_left": {"made": 2, "attempted": 5, "pct": 0.4},
+        "paint_left": {"made": 1, "attempted": 2, "pct": 0.5}
+      }
+    },
+    "4": {
+      "player_id": 4,
+      "name": "Seydou Coulibaly",
+      "pos": "SG",
+      "total_distance_m": 4560,
+      "avg_speed_ms": 1.90,
+      "max_speed_ms": 7.1,
+      "time_in_paint_s": 98,
+      "shots_attempted": 9,
+      "shots_made": 4,
+      "shot_pct": 0.444,
+      "shot_zones": {
+        "top_key_3": {"made": 3, "attempted": 6, "pct": 0.5},
+        "mid_range_center": {"made": 1, "attempted": 3, "pct": 0.333}
+      }
+    },
+    "5": {
+      "player_id": 5,
+      "name": "Ibrahim Ouedraogo",
+      "pos": "PF",
+      "total_distance_m": 3780,
+      "avg_speed_ms": 1.57,
+      "max_speed_ms": 6.2,
+      "time_in_paint_s": 410,
+      "shots_attempted": 8,
+      "shots_made": 5,
+      "shot_pct": 0.625,
+      "shot_zones": {
+        "paint_left": {"made": 4, "attempted": 5, "pct": 0.8},
+        "mid_range_left": {"made": 1, "attempted": 3, "pct": 0.333}
+      }
+    }
+  },
+  "shot_chart": {
+    "paint_left": {"made": 18, "attempted": 28, "pct": 0.643},
+    "mid_range_left": {"made": 4, "attempted": 10, "pct": 0.4},
+    "mid_range_center": {"made": 1, "attempted": 4, "pct": 0.25},
+    "corner_3_left_bot": {"made": 3, "attempted": 7, "pct": 0.429},
+    "top_key_3": {"made": 6, "attempted": 15, "pct": 0.4},
+    "arc_3_left": {"made": 2, "attempted": 5, "pct": 0.4}
+  },
+  "key_events": [
+    {"time_s": 134, "frame_id": 4020, "type": "dunk", "player": "Aboubacar Diabate", "players_involved": [2]},
+    {"time_s": 333, "frame_id": 9990, "type": "steal", "player": "Yao Konate", "players_involved": [1, 4]},
+    {"time_s": 527, "frame_id": 15810, "type": "three_pointer", "player": "Mamadou Traore", "players_involved": [3]},
+    {"time_s": 712, "frame_id": 21360, "type": "steal", "player": "Seydou Coulibaly", "players_involved": [4, 2]},
+    {"time_s": 889, "frame_id": 26670, "type": "three_pointer", "player": "Yao Konate", "players_involved": [1]},
+    {"time_s": 1103, "frame_id": 33090, "type": "block", "player": "Aboubacar Diabate", "players_involved": [2, 5]},
+    {"time_s": 1452, "frame_id": 43560, "type": "dunk", "player": "Ibrahim Ouedraogo", "players_involved": [5]},
+    {"time_s": 1780, "frame_id": 53400, "type": "three_pointer", "player": "Seydou Coulibaly", "players_involved": [4]},
+    {"time_s": 2201, "frame_id": 66030, "type": "steal", "player": "Mamadou Traore", "players_involved": [3, 1]}
+  ]
+}

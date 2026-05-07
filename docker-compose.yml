@@ -1,0 +1,57 @@
+version: "3.9"
+
+services:
+  web:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: songa-web
+    restart: unless-stopped
+    ports:
+      - "3000:3000"
+    environment:
+      - NEXT_PUBLIC_API_URL=${NEXT_PUBLIC_API_URL:-http://cv-api:8000}
+      - CV_API_URL=http://cv-api:8000
+    depends_on:
+      - cv-api
+    networks:
+      - songa
+
+  cv-api:
+    build:
+      context: ./cv-pipeline
+      dockerfile: Dockerfile
+    container_name: songa-cv-api
+    restart: unless-stopped
+    ports:
+      - "8000:8000"
+    volumes:
+      - cv-uploads:/app/uploads
+      - cv-output:/app/output
+      - cv-models:/app/models
+    environment:
+      - PYTHONUNBUFFERED=1
+    networks:
+      - songa
+    deploy:
+      resources:
+        reservations:
+          devices:
+            - driver: nvidia
+              count: all
+              capabilities: [gpu]
+
+  cv-api-cpu:
+    extends:
+      service: cv-api
+    profiles: ["cpu"]
+    deploy: {}
+
+volumes:
+  cv-uploads:
+  cv-output:
+  cv-models:
+
+networks:
+  songa:
+    driver: bridge

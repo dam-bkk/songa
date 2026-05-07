@@ -1,0 +1,14 @@
+node_modules
+.next
+.git
+.github
+*.md
+.env
+.env.local
+cv-pipeline/.venv
+cv-pipeline/uploads/
+cv-pipeline/output/
+cv-pipeline/models/*.pt
+**/__pycache__
+**/*.pyc
+.DS_Store
