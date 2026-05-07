@@ -1,8 +1,8 @@
 version: "3.9"
 
-# Songa binds to 172.18.0.1 (Docker bridge host IP) so the shared Caddy
-# container on this VM can reach it via reverse_proxy 172.18.0.1:3010.
-# Add Caddyfile.snippet blocks to /opt/apps/Caddyfile on the VM.
+# Production: Next.js web only.
+# CV pipeline runs locally — not deployed to VM.
+# Reverse proxy handled by shared Caddy on VM (see Caddyfile.snippet).
 
 services:
   web:
@@ -14,48 +14,5 @@ services:
     ports:
       - "172.18.0.1:3010:3000"
     environment:
-      - NEXT_PUBLIC_API_URL=${NEXT_PUBLIC_API_URL:-https://api.songa.damien.asia}
-      - CV_API_URL=http://cv-api:8000
-    depends_on:
-      - cv-api
-    networks:
-      - songa
-
-  cv-api:
-    build:
-      context: ./cv-pipeline
-      dockerfile: Dockerfile
-    container_name: songa-cv-api
-    restart: unless-stopped
-    ports:
-      - "172.18.0.1:8010:8000"
-    volumes:
-      - cv-uploads:/app/uploads
-      - cv-output:/app/output
-      - cv-models:/app/models
-    environment:
-      - PYTHONUNBUFFERED=1
-    networks:
-      - songa
-
-  # GPU variant — only on machines with NVIDIA GPU
-  cv-api-gpu:
-    extends:
-      service: cv-api
-    profiles: ["gpu"]
-    deploy:
-      resources:
-        reservations:
-          devices:
-            - driver: nvidia
-              count: all
-              capabilities: [gpu]
-
-volumes:
-  cv-uploads:
-  cv-output:
-  cv-models:
-
-networks:
-  songa:
-    driver: bridge
+      - NODE_ENV=production
+      - NEXT_TELEMETRY_DISABLED=1

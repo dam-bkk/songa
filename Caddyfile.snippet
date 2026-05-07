@@ -1,12 +1,10 @@
 # ── Songa ─────────────────────────────────────────────────────────────────────
-# Append these two blocks to /opt/apps/Caddyfile on the VM, then reload:
+# Append to /opt/apps/Caddyfile on the VM, then:
 #   docker compose -f /opt/apps/docker-compose.yml exec caddy caddy reload --config /etc/caddy/Caddyfile
 
 songa.damien.asia {
     reverse_proxy 172.18.0.1:3010
-
     encode gzip zstd
-
     header {
         Strict-Transport-Security "max-age=31536000; includeSubDomains; preload"
         X-Content-Type-Options nosniff
@@ -14,16 +12,4 @@ songa.damien.asia {
         Referrer-Policy strict-origin-when-cross-origin
         -Server
     }
-}
-
-api.songa.damien.asia {
-    reverse_proxy 172.18.0.1:8010
-
-    header {
-        Access-Control-Allow-Origin "https://songa.damien.asia"
-        Access-Control-Allow-Methods "GET, POST, OPTIONS"
-        Access-Control-Allow-Headers "Content-Type, Authorization"
-    }
-
-    encode gzip
 }
