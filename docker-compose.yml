@@ -1,5 +1,9 @@
 version: "3.9"
 
+# Songa services bind to unique host ports (3010/8010).
+# Reverse proxy is handled by the shared Caddy instance on this VM.
+# Add Caddyfile.snippet to the shared Caddyfile — see Caddyfile.snippet.
+
 services:
   web:
     build:
@@ -8,10 +12,10 @@ services:
     container_name: songa-web
     restart: unless-stopped
     ports:
-      - "3000:3000"
+      - "127.0.0.1:3010:3000"
     environment:
-      - NEXT_PUBLIC_API_URL=${NEXT_PUBLIC_API_URL:-http://cv-api:8000}
-      - CV_API_URL=http://cv-api:8000
+      - NEXT_PUBLIC_API_URL=${NEXT_PUBLIC_API_URL:-https://api.songa.damien.asia}
+      - CV_API_URL=http://cv-api:8010
     depends_on:
       - cv-api
     networks:
@@ -24,7 +28,7 @@ services:
     container_name: songa-cv-api
     restart: unless-stopped
     ports:
-      - "8000:8000"
+      - "127.0.0.1:8010:8000"
     volumes:
       - cv-uploads:/app/uploads
       - cv-output:/app/output
@@ -33,6 +37,12 @@ services:
       - PYTHONUNBUFFERED=1
     networks:
       - songa
+
+  # GPU variant — only on machines with NVIDIA GPU
+  cv-api-gpu:
+    extends:
+      service: cv-api
+    profiles: ["gpu"]
     deploy:
       resources:
         reservations:
@@ -40,12 +50,6 @@ services:
             - driver: nvidia
               count: all
               capabilities: [gpu]
-
-  cv-api-cpu:
-    extends:
-      service: cv-api
-    profiles: ["cpu"]
-    deploy: {}
 
 volumes:
   cv-uploads:

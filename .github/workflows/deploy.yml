@@ -4,11 +4,14 @@ on:
   push:
     branches: [main]
 
-# Requires secrets: AZURE_VM_SSH_KEY, AZURE_VM_HOST, AZURE_VM_USER
+# Requires GitHub secrets:
+#   DEPLOY_HOST  → 217.142.191.82
+#   DEPLOY_USER  → ubuntu
+#   DEPLOY_KEY   → contents of ~/.ssh/oci_ampere.key
 
 jobs:
   deploy:
-    name: Deploy to Azure VM
+    name: Deploy to OCI VM
     runs-on: ubuntu-latest
     environment: production
     steps:
@@ -17,13 +20,12 @@ jobs:
       - name: Deploy via SSH
         uses: appleboy/ssh-action@v1
         with:
-          host: ${{ secrets.AZURE_VM_HOST }}
-          username: ${{ secrets.AZURE_VM_USER }}
-          key: ${{ secrets.AZURE_VM_SSH_KEY }}
+          host: ${{ secrets.DEPLOY_HOST }}
+          username: ${{ secrets.DEPLOY_USER }}
+          key: ${{ secrets.DEPLOY_KEY }}
           script: |
             cd /opt/apps/songa
             git pull origin main
-            docker compose pull 2>/dev/null || true
             docker compose up --build -d
             docker compose ps
             echo "Deploy complete — $(date)"

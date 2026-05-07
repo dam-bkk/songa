@@ -1,0 +1,29 @@
+# ── Songa ─────────────────────────────────────────────────────────────────────
+# Add these two blocks to your shared Caddyfile on the VM.
+# Replace songa.damien.asia / api.songa.damien.asia with your actual domain.
+
+songa.damien.asia {
+    reverse_proxy 127.0.0.1:3010
+
+    encode gzip zstd
+
+    header {
+        Strict-Transport-Security "max-age=31536000; includeSubDomains; preload"
+        X-Content-Type-Options nosniff
+        X-Frame-Options DENY
+        Referrer-Policy strict-origin-when-cross-origin
+        -Server
+    }
+}
+
+api.songa.damien.asia {
+    reverse_proxy 127.0.0.1:8010
+
+    header {
+        Access-Control-Allow-Origin "https://songa.damien.asia"
+        Access-Control-Allow-Methods "GET, POST, OPTIONS"
+        Access-Control-Allow-Headers "Content-Type, Authorization"
+    }
+
+    encode gzip
+}
