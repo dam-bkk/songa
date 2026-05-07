@@ -1,5 +1,5 @@
 "use client";
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useRef, useState, startTransition } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { X, CheckCircle, Loader2, Send } from "lucide-react";
 import { useDemoModal } from "@/lib/demoModal";
@@ -35,9 +35,11 @@ export function DemoModal() {
     if (isOpen) {
       setTimeout(() => firstInputRef.current?.focus(), 50);
     } else {
-      setFormState("idle");
-      setErrors({});
-      setFields({ name: "", email: "", club: "", role: "", message: "" });
+      startTransition(() => {
+        setFormState("idle");
+        setErrors({});
+        setFields({ name: "", email: "", club: "", role: "", message: "" });
+      });
     }
   }, [isOpen]);
 

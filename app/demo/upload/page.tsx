@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useRef, useCallback, useEffect } from "react";
+import { useState, useRef, useCallback, useEffect, startTransition } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import {
   Upload,
@@ -10,10 +10,8 @@ import {
   FileText,
   CheckCircle,
   AlertCircle,
-  ArrowLeft,
 } from "lucide-react";
-import { Logo } from "@/components/brand/Logo";
-import { api } from "@/lib/api";
+import { DashboardLayout } from "@/components/dashboard/DashboardLayout";
 import { useJobPoller } from "@/hooks/useJobPoller";
 
 // ─── Types ────────────────────────────────────────────────────────────────────
@@ -22,7 +20,6 @@ type PageState = "idle" | "selected" | "uploading" | "analyzing" | "done" | "err
 
 // ─── Constants ────────────────────────────────────────────────────────────────
 
-const ACCEPTED = [".mp4", ".mkv", ".avi"];
 const MAX_SIZE_BYTES = 2 * 1024 * 1024 * 1024; // 2 GB
 const MAX_SIZE_LABEL = "2 Go";
 
@@ -142,10 +139,12 @@ export default function UploadPage() {
   // React to job updates
   useEffect(() => {
     if (!job) return;
-    if (job.status === "done") setPageState("done");
+    if (job.status === "done") startTransition(() => setPageState("done"));
     if (job.status === "error") {
-      setErrorMessage(job.error ?? "Erreur lors de l'analyse.");
-      setPageState("error");
+      startTransition(() => {
+        setErrorMessage(job.error ?? "Erreur lors de l'analyse.");
+        setPageState("error");
+      });
     }
   }, [job]);
 
@@ -263,34 +262,8 @@ export default function UploadPage() {
   // ── Render ────────────────────────────────────────────────────────────────
 
   return (
-    <div className="min-h-screen bg-ink text-bone flex flex-col">
-      {/* Header */}
-      <header className="border-b border-slate-700 px-6 py-4 flex items-center justify-between">
-        <div className="flex items-center gap-6">
-          <Logo className="h-6 w-auto text-bone" />
-          <a
-            href="/"
-            className="flex items-center gap-1.5 font-geist text-xs text-slate-400 hover:text-bone transition-colors"
-          >
-            <ArrowLeft size={12} />
-            Retour à l&apos;accueil
-          </a>
-        </div>
-      </header>
-
-      {/* Main */}
-      <main className="flex-1 max-w-3xl mx-auto w-full px-6 py-12 flex flex-col gap-8">
-        <div>
-          <p className="font-mono text-xs text-court uppercase tracking-widest mb-2">
-            Analyse de match
-          </p>
-          <h1 className="font-fraunces text-3xl text-bone">
-            Déposez votre vidéo
-          </h1>
-          <p className="font-geist text-sm text-slate-400 mt-2">
-            Notre pipeline CV analyse vos matchs en moins de 2 minutes.
-          </p>
-        </div>
+    <DashboardLayout activeItem="upload" title="Upload vidéo" subtitle="Analyse de match par CV">
+      <div className="max-w-3xl mx-auto flex flex-col gap-8">
 
         <AnimatePresence mode="wait">
 
@@ -499,7 +472,7 @@ export default function UploadPage() {
                 </p>
               </div>
               <a
-                href={`/results/${jobId}`}
+                href={`/demo/results/${jobId}`}
                 className="w-full max-w-xs text-center py-3.5 bg-court text-ink font-geist font-semibold text-sm rounded-xl hover:bg-court/90 transition-colors"
               >
                 Voir les résultats
@@ -564,7 +537,7 @@ export default function UploadPage() {
             ))}
           </div>
         </div>
-      </main>
-    </div>
+      </div>
+    </DashboardLayout>
   );
 }

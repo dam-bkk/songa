@@ -1,6 +1,5 @@
 "use client";
 import { motion, AnimatePresence } from "framer-motion";
-import { useState } from "react";
 import { Logo } from "@/components/brand/Logo";
 import {
   LayoutDashboard,
@@ -48,7 +47,7 @@ const ANALYSE_ITEMS: NavItem[] = [
 const CLUB_ITEMS: NavItem[] = [
   { id: "players",  label: "Joueurs",      icon: Users,          href: "/demo/coach#players" },
   { id: "academy",  label: "Académie",     icon: GraduationCap,  href: "/demo/academy" },
-  { id: "upload",   label: "Upload vidéo", icon: Upload,         href: "/upload" },
+  { id: "upload",   label: "Upload vidéo", icon: Upload,         href: "/demo/upload" },
 ];
 
 function NavLink({ item, active }: { item: NavItem; active: boolean }) {

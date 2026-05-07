@@ -1,4 +1,4 @@
-import { useState, useEffect, useRef, useCallback } from "react";
+import { useState, useEffect, useRef, useCallback, startTransition } from "react";
 import { api, type AnalysisJob } from "@/lib/api";
 
 const BACKOFF = [2000, 3000, 5000]; // ms — caps at last value
@@ -65,9 +65,11 @@ export function useJobPoller(jobId: string | null): JobPollerResult {
 
   useEffect(() => {
     if (!jobId) {
-      setJob(null);
-      setIsLoading(false);
-      setTickCount(0);
+      startTransition(() => {
+        setJob(null);
+        setIsLoading(false);
+        setTickCount(0);
+      });
       clearTimer();
       return;
     }
@@ -75,9 +77,10 @@ export function useJobPoller(jobId: string | null): JobPollerResult {
     const isTerminal = job?.status === "done" || job?.status === "error";
     if (isTerminal) return;
 
-    setIsLoading(true);
+    startTransition(() => setIsLoading(true));
+    // eslint-disable-next-line react-hooks/set-state-in-effect
     void poll(jobId, tickCount).then(() => {
-      if (mountedRef.current) setIsLoading(false);
+      if (mountedRef.current) startTransition(() => setIsLoading(false));
     });
 
     return clearTimer;
