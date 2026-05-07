@@ -9,6 +9,9 @@ on:
 #   DEPLOY_USER  → ubuntu
 #   DEPLOY_KEY   → contents of ~/.ssh/oci_ampere.key
 
+env:
+  FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: true
+
 jobs:
   deploy:
     name: Deploy to OCI VM
@@ -24,6 +27,9 @@ jobs:
           username: ${{ secrets.DEPLOY_USER }}
           key: ${{ secrets.DEPLOY_KEY }}
           script: |
+            if [ ! -d /opt/apps/songa ]; then
+              git clone https://github.com/dam-bkk/songa.git /opt/apps/songa
+            fi
             cd /opt/apps/songa
             git pull origin main
             docker compose up --build -d

@@ -1,8 +1,8 @@
 version: "3.9"
 
-# Songa services bind to unique host ports (3010/8010).
-# Reverse proxy is handled by the shared Caddy instance on this VM.
-# Add Caddyfile.snippet to the shared Caddyfile — see Caddyfile.snippet.
+# Songa binds to 172.18.0.1 (Docker bridge host IP) so the shared Caddy
+# container on this VM can reach it via reverse_proxy 172.18.0.1:3010.
+# Add Caddyfile.snippet blocks to /opt/apps/Caddyfile on the VM.
 
 services:
   web:
@@ -12,10 +12,10 @@ services:
     container_name: songa-web
     restart: unless-stopped
     ports:
-      - "127.0.0.1:3010:3000"
+      - "172.18.0.1:3010:3000"
     environment:
       - NEXT_PUBLIC_API_URL=${NEXT_PUBLIC_API_URL:-https://api.songa.damien.asia}
-      - CV_API_URL=http://cv-api:8010
+      - CV_API_URL=http://cv-api:8000
     depends_on:
       - cv-api
     networks:
@@ -28,7 +28,7 @@ services:
     container_name: songa-cv-api
     restart: unless-stopped
     ports:
-      - "127.0.0.1:8010:8000"
+      - "172.18.0.1:8010:8000"
     volumes:
       - cv-uploads:/app/uploads
       - cv-output:/app/output

@@ -1,9 +1,9 @@
 # ── Songa ─────────────────────────────────────────────────────────────────────
-# Add these two blocks to your shared Caddyfile on the VM.
-# Replace songa.damien.asia / api.songa.damien.asia with your actual domain.
+# Append these two blocks to /opt/apps/Caddyfile on the VM, then reload:
+#   docker compose -f /opt/apps/docker-compose.yml exec caddy caddy reload --config /etc/caddy/Caddyfile
 
 songa.damien.asia {
-    reverse_proxy 127.0.0.1:3010
+    reverse_proxy 172.18.0.1:3010
 
     encode gzip zstd
 
@@ -17,7 +17,7 @@ songa.damien.asia {
 }
 
 api.songa.damien.asia {
-    reverse_proxy 127.0.0.1:8010
+    reverse_proxy 172.18.0.1:8010
 
     header {
         Access-Control-Allow-Origin "https://songa.damien.asia"
