@@ -3,8 +3,8 @@ WORKDIR /app
 
 # System deps pour OpenCV
 RUN apt-get update && apt-get install -y \
-    libgl1-mesa-glx libglib2.0-0 libsm6 libxext6 libxrender-dev \
-    ffmpeg libavcodec-dev libavformat-dev libswscale-dev \
+    libgl1 libglib2.0-0 libsm6 libxext6 libxrender1 \
+    ffmpeg \
     && rm -rf /var/lib/apt/lists/*
 
 # Python deps (sans torch/torchvision pour image légère — optionnel en prod GPU)

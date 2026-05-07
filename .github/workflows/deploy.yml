@@ -1,13 +1,7 @@
 name: Deploy to Production
 
 on:
-  push:
-    branches: [main]
-
-# Requires GitHub secrets:
-#   DEPLOY_HOST  → 217.142.191.82
-#   DEPLOY_USER  → ubuntu
-#   DEPLOY_KEY   → contents of ~/.ssh/oci_ampere.key
+  workflow_dispatch:
 
 env:
   FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: true
@@ -16,7 +10,6 @@ jobs:
   deploy:
     name: Deploy to OCI VM
     runs-on: ubuntu-latest
-    environment: production
     steps:
       - uses: actions/checkout@v4
 
@@ -27,9 +20,6 @@ jobs:
           username: ${{ secrets.DEPLOY_USER }}
           key: ${{ secrets.DEPLOY_KEY }}
           script: |
-            if [ ! -d /opt/apps/songa ]; then
-              git clone https://github.com/dam-bkk/songa.git /opt/apps/songa
-            fi
             cd /opt/apps/songa
             git pull origin main
             docker compose up --build -d
